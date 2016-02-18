@@ -29,7 +29,7 @@ class Profile(ndb.Model):
     mainEmail = ndb.StringProperty()
     teeShirtSize = ndb.StringProperty(default='NOT_SPECIFIED')
     conferenceKeysToAttend = ndb.StringProperty(repeated=True)
-    sessionWishlistKeys = ndb.StringProperty(repeated=True)
+    sessionWishlistKeys = ndb.KeyProperty(repeated=True, kind='Session')
 
 
 class ProfileMiniForm(messages.Message):
@@ -87,30 +87,19 @@ class ConferenceForm(messages.Message):
     organizerDisplayName = messages.StringField(12)
 
 
-"""
-Session name
-highlights
-speaker
-duration
-typeOfSession
-date
-start time
-"""
-
-
 class Session(ndb.Model):
-    """Conference -- Conference object"""
+    """Session -- Session object"""
     name = ndb.StringProperty(required=True)
     highlights = ndb.StringProperty()
     speaker = ndb.StringProperty()
-    duration = ndb.IntegerProperty()
+    duration = ndb.IntegerProperty() # Number of minutes
     typeOfSession = ndb.StringProperty()
     date = ndb.DateProperty()
     startTime = ndb.TimeProperty()
 
 
 class SessionForm(messages.Message):
-    """ConferenceForm -- Conference outbound form message"""
+    """SessionForm -- Session outbound form message"""
     name = messages.StringField(1)
     highlights = messages.StringField(2)
     speaker = messages.StringField(3)
@@ -118,6 +107,7 @@ class SessionForm(messages.Message):
     typeOfSession = messages.StringField(5)
     date = messages.StringField(6)  # DateTimeField()
     startTime = messages.StringField(7)  # DateTimeField()
+    websafeKey = messages.StringField(8)
 
 
 class SessionForms(messages.Message):
